@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HASH PLAYER // NEURAL ELITE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --neon: #00f3ff;
+            --purple: #bc13fe;
+            --glass: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.3);
+            --glow: 0 0 25px rgba(0, 243, 255, 0.4);
+            --bg-img: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000');
+        }
+
+        .dark-mode { --glass: rgba(0, 0, 0, 0.7); --card-bg: rgba(0, 0, 0, 0.9); --border: rgba(255, 255, 255, 0.1); }
+
+        body { margin: 0; background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        
+        .bg-vibrant { position: fixed; inset: 0; z-index: -1; background: var(--bg-img); background-size: cover; background-position: center; filter: brightness(0.6) contrast(1.1); transition: 1s ease; }
+
+        .container { width: 92%; max-width: 440px; height: 95vh; background: rgba(0, 0, 0, 0.15); border: 1px solid var(--border); border-radius: 50px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(0px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); transition: 0.3s; }
+
+        .micro-settings { position: absolute; top: 85px; width: 92%; display: flex; justify-content: space-between; left: 4%; z-index: 20; }
+        .m-btn { width: 36px; height: 36px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px); }
+
+        .app-header { padding: 35px 10px 5px; text-align: center; z-index: 10; }
+        .app-header h1 { font-family: 'Orbitron'; font-size: 1.8rem; margin: 0; font-weight: 900; background: linear-gradient(90deg, #fff, var(--neon), var(--purple), #fff); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flowText 4s linear infinite; letter-spacing: 3px; }
+        
+        .vibes-btn { display: inline-block; margin-top: 10px; padding: 7px 25px; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; font-size: 0.75rem; color: var(--neon); font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(0,243,255,0.2); }
+        .vibes-btn:hover { background: rgba(0, 243, 255, 0.2); }
+
+        .viz-hub { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #circularViz, #linearViz { position: absolute; width: 100%; z-index: 1; pointer-events: none; }
+        #circularViz { height: 70%; top: 5%; }
+        #linearViz { height: 80px; bottom: 10px; opacity: 0.4; }
+
+        .center-core { width: 65px; height: 65px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.4); animation: rotate 8s linear infinite; box-shadow: inset 0 0 15px var(--neon); }
+
+        .glass-controls { background: var(--glass); padding: 10px 20px 20px; border-radius: 50px 50px 0 0; border-top: 1px solid var(--border); backdrop-filter: blur(25px); z-index: 30; }
+
+        #next-track-label { font-size: 0.6rem; color: var(--neon); text-align: center; margin-bottom: 8px; font-family: 'Orbitron'; text-transform: uppercase; letter-spacing: 1px; }
+
+        .slider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 12px; }
+        .mini-slider { -webkit-appearance: none; width: 100%; height: 2px; background: rgba(255,255,255,0.2); outline: none; border-radius: 2px; }
+        .mini-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: var(--neon); border-radius: 50%; cursor: pointer; }
+
+        .progress-rail { height: 5px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 12px; cursor: pointer; }
+        #fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), var(--purple)); transition: width 0.1s; }
+
+        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
+        .glass-btn { background: var(--glass); border: 1px solid var(--border); height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .play-btn { height: 65px; border-radius: 18px; border-color: var(--neon); color: var(--neon); font-size: 1.5rem; }
+
+        #fx-panel, #file-list-view { position: absolute; inset: 0; background: var(--card-bg); z-index: 500; border-radius: 50px; padding: 60px 25px; display: none; flex-direction: column; backdrop-filter: blur(40px); border: 1px solid var(--border); transition: 0.4s ease; }
+        .glass-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; }
+        .glass-card:hover { border-color: var(--neon); background: rgba(0, 243, 255, 0.1); }
+
+        .theme-hub { display: flex; gap: 8px; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); align-items: center; }
+        .theme-dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; background-size: cover; }
+
+        @keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+        @keyframes flowText { 0% {background-position: 0% 50%;} 100% {background-position: 200% 50%;} }
+    </style>
+</head>
+<body id="mainBody">
+
+<div class="bg-vibrant" id="bgBody"></div>
+
+<div class="container" id="p-container">
+    <div class="micro-settings">
+        <div class="m-btn" onclick="cycleBlur()">💧</div>
+        <div class="m-btn" onclick="toggleFX()">🎚️</div>
+    </div>
+
+    <div class="app-header">
+        <h1>HASH PLAYER</h1>
+        <div class="vibes-btn" onclick="toggleFiles()">VIBES ARE HERE</div>
+    </div>
+
+    <div class="viz-hub">
+        <canvas id="circularViz"></canvas>
+        <canvas id="linearViz"></canvas>
+        <div class="center-core" id="core"><span style="font-size: 1.2rem;">⚡</span></div>
+        
+        <div style="text-align: center; z-index: 5; margin-top: 15px;">
+            <h2 id="title" style="font-size: 0.9rem; letter-spacing: 2px; margin: 0; color: #fff;">LOAD FOLDER</h2>
+            <div id="status" style="font-size: 0.5rem; color: var(--neon); margin-top: 5px;">AWAITING SYNC...</div>
+        </div>
+
+        <div id="fx-panel">
+            <h3 style="font-family:'Orbitron'; color:var(--neon); font-size:0.8rem;">AUDIO DSP</h3>
+            <label style="font-size:0.6rem;">GAIN BOOSTER</label><input type="range" id="gainCtrl" class="mini-slider" min="0.5" max="3" step="0.1" value="1">
+            <label style="font-size:0.6rem; margin-top:10px;">BASS DRIVE</label><input type="range" id="bassCtrl" class="mini-slider" min="-10" max="25" step="1" value="0">
+            <label style="font-size:0.6rem; margin-top:10px;">TREBLE CRYSTAL</label><input type="range" id="trebleCtrl" class="mini-slider" min="-10" max="20" step="1" value="0">
+            <div class="glass-btn" onclick="toggleFX()" style="margin-top:30px; color:red; border-color:red;">CLOSE</div>
+        </div>
+
+        <div id="file-list-view">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:'Orbitron'; font-size:0.7rem;">
+                <span style="color:var(--neon)">NEURAL LIBRARY</span><span onclick="toggleFiles()" style="color:red; cursor:pointer;">[ BACK ]</span>
+            </div>
+            <div id="list-items" style="overflow-y:auto; flex:1; padding-right:5px;"></div>
+        </div>
+    </div>
+
+    <div class="glass-controls">
+        <div id="next-track-label">NEXT: NO TRACK</div>
+        
+        <div class="slider-row">
+            <div><span style="font-size:0.5rem; color:var(--neon)">VOL</span><input type="range" class="mini-slider" oninput="audio.volume = this.value/100" value="100"></div>
+            <div><span style="font-size:0.5rem; color:var(--purple)">BRIGHT</span><input type="range" class="mini-slider" oninput="document.getElementById('bgBody').style.filter = `brightness(${this.value/100})`" value="60"></div>
+        </div>
+
+        <div class="progress-rail" onclick="seek(event)"><div id="fill"></div></div>
+
+        <div style="display: flex; justify-content: space-around; font-family: 'Orbitron'; font-size: 0.55rem; margin-bottom: 12px;">
+            <div onclick="tapSpeed()" style="cursor:pointer">SPD: <span id="s-val" style="color:var(--neon)">1.0</span></div>
+            <div onclick="tapPitch()" style="cursor:pointer">PITCH: <span id="p-val" style="color:var(--purple)">1.0</span></div>
+            <div onclick="toggleDarkMode()" style="cursor:pointer">🌓 MODE</div>
+            <div onclick="setSleepTimer()" style="cursor:pointer">⏰ <span id="t-val">OFF</span></div>
+        </div>
+
+        <div class="btn-grid">
+            <div class="glass-btn" onclick="seekRelative(-10)">-10</div>
+            <div class="glass-btn" onclick="prev()">⏮</div>
+            <div class="glass-btn play-btn" onclick="togglePlay()" id="play-ui">▶</div>
+            <div class="glass-btn" onclick="next()">⏭</div>
+            <div class="glass-btn" onclick="seekRelative(10)">+10</div>
+        </div>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="glass-btn" onclick="toggleShuffle()" id="shuf-btn" style="width:45px; height:35px;">🔀</div>
+            
+            <div class="theme-hub">
+                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=100')" onclick="changeTheme(0)"></div>
+                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100')" onclick="changeTheme(1)"></div>
+                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=100')" onclick="changeTheme(2)"></div>
+                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=100')" onclick="changeTheme(3)"></div>
+            </div>
+
+            <div class="glass-btn" onclick="toggleRepeat()" id="rep-btn" style="width:45px; height:35px;">🔁</div>
+        </div>
+        <div class="glass-btn" onclick="document.getElementById('fIn').click()" style="width: 100%; height: 35px; margin-top: 10px; font-size: 0.6rem; border-color: var(--neon); color: var(--neon); letter-spacing: 2px;">SYNC FOLDER</div>
+    </div>
+</div>
+
+<input type="file" id="fIn" webkitdirectory directory multiple style="display:none">
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+    const audio = document.getElementById('audio');
+    let songs = [], idx = 0, isShuffle = false, repeatMode = 0, bIdx = 0, currentPitch = 1.0;
+    let actx, analyser, data, gainNode, bassNode, trebleNode;
+
+    const themes = [
+        'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000',
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000',
+        'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1000',
+        'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=1000'
+    ];
+
+    function changeTheme(i) { document.getElementById('bgBody').style.backgroundImage = `url(${themes[i]})`; }
+    function toggleDarkMode() { document.getElementById('mainBody').classList.toggle('dark-mode'); }
+    function cycleBlur() { const blurs = [0, 10, 25, 45]; bIdx = (bIdx + 1) % blurs.length; document.getElementById('p-container').style.backdropFilter = `blur(${blurs[bIdx]}px)`; }
+    function toggleFiles() { const v = document.getElementById('file-list-view'); v.style.display = (v.style.display === 'flex') ? 'none' : 'flex'; }
+    function toggleFX() { const p = document.getElementById('fx-panel'); p.style.display = (p.style.display === 'flex') ? 'none' : 'flex'; }
+
+    document.getElementById('fIn').addEventListener('change', e => {
+        const files = Array.from(e.target.files).filter(f => f.type.startsWith('audio'));
+        songs = files.map(file => ({file, isFav: false}));
+        if(songs.length) { 
+            document.getElementById('status').innerText = "ENGINE ONLINE - " + songs.length + " TRACKS";
+            renderList(); load(0); 
+        }
+    });
+
+    function load(i) {
+        if(!songs[i]) return;
+        idx = i;
+        audio.src = URL.createObjectURL(songs[i].file);
+        document.getElementById('title').innerText = songs[i].file.name.split('.')[0].toUpperCase();
+        
+        const nextIdx = (idx + 1) % songs.length;
+        document.getElementById('next-track-label').innerText = "NEXT: " + songs[nextIdx].file.name.split('.')[0];
+        
+        initAudioSystem();
+        audio.play();
+        document.getElementById('play-ui').innerText = '⏸';
+        renderList();
+    }
+
+    function initAudioSystem() {
+        if(actx) return;
+        actx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = actx.createAnalyser();
+        const source = actx.createMediaElementSource(audio);
+        gainNode = actx.createGain();
+        bassNode = actx.createBiquadFilter(); bassNode.type = 'lowshelf'; bassNode.frequency.value = 200;
+        trebleNode = actx.createBiquadFilter(); trebleNode.type = 'highshelf'; trebleNode.frequency.value = 3000;
+        source.connect(bassNode).connect(trebleNode).connect(gainNode).connect(analyser).connect(actx.destination);
+        data = new Uint8Array(analyser.frequencyBinCount);
+        
+        document.getElementById('gainCtrl').oninput = (e) => gainNode.gain.value = e.target.value;
+        document.getElementById('bassCtrl').oninput = (e) => bassNode.gain.value = e.target.value;
+        document.getElementById('trebleCtrl').oninput = (e) => trebleNode.gain.value = e.target.value;
+        draw();
+    }
+
+    function draw() {
+        requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(data);
+        
+        const cv = document.getElementById('circularViz');
+        const cx = cv.getContext('2d');
+        cv.width = cv.offsetWidth; cv.height = cv.offsetHeight;
+        const cX = cv.width/2, cY = cv.height/2;
+        for(let i=0; i<64; i++) {
+            const r = 75 + (data[i] * 0.45);
+            const a = (i * Math.PI * 2) / 64;
+            cx.strokeStyle = i % 2 === 0 ? 'var(--neon)' : 'var(--purple)';
+            cx.lineWidth = 2; cx.beginPath(); cx.moveTo(cX+Math.cos(a)*70, cY+Math.sin(a)*70); cx.lineTo(cX+Math.cos(a)*r, cY+Math.sin(a)*r); cx.stroke();
+        }
+
+        const lv = document.getElementById('linearViz');
+        const lx = lv.getContext('2d');
+        lv.width = lv.offsetWidth; lv.height = lv.offsetHeight;
+        for(let i=0; i<lv.width/5; i++) {
+            const h = data[i] * 0.3;
+            lx.fillStyle = i % 2 === 0 ? 'var(--neon)' : 'rgba(255,255,255,0.2)';
+            lx.fillRect(i*8, lv.height-h, 4, h);
+        }
+        
+        const beat = (data[2]/255) * 0.2;
+        document.getElementById('core').style.transform = `scale(${1 + beat})`;
+    }
+
+    function togglePlay() { 
+        if(!audio.src) return;
+        if(actx && actx.state === 'suspended') actx.resume();
+        audio.paused ? audio.play() : audio.pause(); 
+        document.getElementById('play-ui').innerText = audio.paused ? '▶' : '⏸'; 
+    }
+    
+    function next() { load(isShuffle ? Math.floor(Math.random()*songs.length) : (idx+1)%songs.length); }
+    function prev() { load((idx-1+songs.length)%songs.length); }
+    
+    function tapPitch() { 
+        currentPitch = currentPitch >= 2.0 ? 1.0 : parseFloat((currentPitch + 0.1).toFixed(1));
+        audio.preservesPitch = false; 
+        audio.playbackRate = currentPitch;
+        document.getElementById('p-val').innerText = currentPitch.toFixed(1);
+    }
+
+    function tapSpeed() { 
+        const s = [1.0, 1.2, 1.5, 0.8];
+        let n = s[(s.indexOf(audio.playbackRate)+1)%s.length] || 1.0;
+        audio.playbackRate = n; document.getElementById('s-val').innerText = n;
+    }
+
+    function seek(e) { audio.currentTime = (e.offsetX / e.target.offsetWidth) * audio.duration; }
+    function seekRelative(s) { audio.currentTime += s; }
+    
+    function toggleShuffle() { isShuffle = !isShuffle; document.getElementById('shuf-btn').style.color = isShuffle ? 'var(--neon)' : '#fff'; }
+    function toggleRepeat() { repeatMode = (repeatMode + 1) % 3; document.getElementById('rep-btn').innerText = repeatMode === 1 ? '🔂' : '🔁'; }
+
+    function setSleepTimer() { 
+        let m = prompt("Minutes:"); 
+        if(m) { document.getElementById('t-val').innerText = m+'m'; setTimeout(() => audio.pause(), m*60000); }
+    }
+
+    function renderList() {
+        document.getElementById('list-items').innerHTML = songs.map((s, i) => `
+            <div class="glass-card" style="border-color: ${i===idx?'var(--neon)':'var(--border)'}" onclick="load(${i}); toggleFiles();">
+                <span style="color: ${i===idx?'var(--neon)':'#fff'}">${s.file.name}</span>
+            </div>
+        `).join('');
+    }
+
+    audio.ontimeupdate = () => { document.getElementById('fill').style.width = (audio.currentTime/audio.duration)*100 + '%'; };
+    audio.onended = () => { if(repeatMode === 1) audio.play(); else next(); };
+</script>
+</body>
+</html>
