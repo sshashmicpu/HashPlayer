@@ -10,9 +10,9 @@
         :root {
             --neon: #00f3ff;
             --purple: #bc13fe;
-            --glass: rgba(255, 255, 255, 0.15); /* Lighter Glass */
-            --card-bg: rgba(255, 255, 255, 0.12); /* Light Glassy Card */
-            --border: rgba(255, 255, 255, 0.3); /* Brighter Border */
+            --glass: rgba(255, 255, 255, 0.15);
+            --card-bg: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.3);
             --bg-img: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000');
         }
 
@@ -23,64 +23,66 @@
         
         .bg-vibrant { position: fixed; inset: 0; z-index: -1; background: var(--bg-img); background-size: cover; background-position: center; filter: brightness(0.6) contrast(1.1); transition: 1s ease; }
 
-        .container { width: 94%; max-width: 440px; height: 94vh; margin-top: 15px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 50px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(15px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+        /* Reduced top margin for container */
+        .container { width: 94%; max-width: 440px; height: 96vh; margin-top: 5px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 50px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(15px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
 
-        /* TRACK TITLE - Higher & Slower */
+        /* TRACK TITLE - Back Scroll, Centered behind Viz */
         .marquee-bg {
             position: absolute;
-            top: 38%; /* Moved Higher */
-            left: 0;
-            width: 100%;
+            top: 45%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140%;
             overflow: hidden;
             white-space: nowrap;
             z-index: 1;
-            opacity: 0.15;
+            opacity: 0.12;
             pointer-events: none;
         }
         .marquee-content {
             display: inline-block;
             font-family: 'Orbitron';
-            font-size: 5.5rem;
+            font-size: 6rem;
             font-weight: 900;
             color: #fff;
-            padding-left: 100%;
-            animation: ultraSlowScroll 65s linear infinite; /* Even Slower */
+            animation: ultraSlowScroll 50s linear infinite;
         }
         @keyframes ultraSlowScroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+            100% { transform: translateX(-50%); }
         }
 
         .v-label-wrap { position: absolute; height: 35%; width: 40px; display: flex; align-items: center; justify-content: center; z-index: 40; pointer-events: none; top: 190px; left: 5px; overflow: hidden; }
         .v-scroll { writing-mode: vertical-rl; text-orientation: mixed; font-family: 'Orbitron'; font-size: 0.42rem; color: var(--neon); letter-spacing: 2px; animation: vScroll 15s linear infinite; white-space: nowrap; opacity: 0.7; font-weight: bold; border-left: 1px solid rgba(0, 243, 255, 0.3); }
         @keyframes vScroll { from { transform: translateY(100%); } to { transform: translateY(-100%); } }
 
-        .freq-meter { position: absolute; top: 35px; right: 30px; font-family: 'Orbitron'; font-size: 0.55rem; color: var(--neon); text-align: right; z-index: 10; line-height: 1.4; }
+        /* DB Meter moved to avoid header overlap */
+        .freq-meter { position: absolute; top: 85px; right: 25px; font-family: 'Orbitron'; font-size: 0.55rem; color: var(--neon); text-align: right; z-index: 10; line-height: 1.4; opacity: 0.8; }
 
         #next-track-info { font-size: 0.5rem; color: #fff; text-align: center; margin-bottom: 8px; font-weight: 300; animation: glowPulse 2s infinite alternate; }
         @keyframes glowPulse { from { text-shadow: 0 0 2px #fff; opacity: 0.5; } to { text-shadow: 0 0 10px var(--neon); opacity: 1; color: var(--neon); } }
 
-        .micro-settings { position: absolute; top: 130px; width: 90%; display: flex; justify-content: space-between; left: 5%; z-index: 20; }
+        .micro-settings { position: absolute; top: 120px; width: 90%; display: flex; justify-content: space-between; left: 5%; z-index: 20; }
         .m-btn { width: 34px; height: 34px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(5px); }
 
-        .app-header { padding: 40px 10px 5px; text-align: center; z-index: 10; }
+        .app-header { padding: 30px 10px 5px; text-align: center; z-index: 10; }
         .app-header h1 { font-family: 'Orbitron'; font-size: 1.6rem; margin: 0; font-weight: 900; background: linear-gradient(90deg, #fff, var(--neon), var(--purple), #fff); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flowText 4s linear infinite; letter-spacing: 2px; }
         
         .header-controls { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 5px; }
         .vibes-btn { display: inline-block; padding: 6px 22px; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; font-size: 0.65rem; color: var(--neon); font-family: 'Orbitron'; cursor: pointer; }
         .list-trigger { font-size: 1.2rem; cursor: pointer; margin-top: 5px; filter: drop-shadow(0 0 5px var(--neon)); }
 
+        /* Visualizer Larger Size */
         .viz-hub { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: visible; touch-action: none; z-index: 5; }
-        #circularViz { position: absolute; width: 320px; height: 320px; z-index: 1; pointer-events: none; }
-        .center-core { width: 60px; height: 60px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.5); box-shadow: 0 0 15px var(--neon); font-size: 1.2rem; }
+        #circularViz { position: absolute; width: 380px; height: 380px; z-index: 2; pointer-events: none; }
+        .center-core { width: 70px; height: 70px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.6); box-shadow: 0 0 25px var(--neon); font-size: 1.4rem; }
 
         .lin-viz-box { width: 100%; height: 30px; display: flex; align-items: flex-end; justify-content: center; gap: 3px; padding: 0 40px; margin-bottom: 10px; }
         .bar { width: 4px; border-radius: 2px; transition: height 0.05s ease; }
 
-        /* Light Glassy Controls */
-        .glass-controls { background: var(--glass); padding: 18px 20px; border-radius: 40px 40px 0 0; border-top: 1px solid var(--border); backdrop-filter: blur(25px); z-index: 50; }
+        /* Increased Bottom Padding */
+        .glass-controls { background: var(--glass); padding: 25px 25px 40px; border-radius: 45px 45px 0 0; border-top: 1px solid var(--border); backdrop-filter: blur(25px); z-index: 50; }
         
-        /* Light Glassy Panels */
         #fx-panel, #file-list-view { 
             position: absolute; top: 15%; left: 7%; width: 86%; height: 70%;
             background: rgba(255, 255, 255, 0.12); z-index: 500; border-radius: 35px; 
@@ -132,15 +134,14 @@
     </div>
 
     <div class="marquee-bg">
-        <span class="marquee-content" id="bgTitle">AWAITING TRACK SIGNAL...</span>
+        <span class="marquee-content" id="bgTitle">AWAITING SIGNAL... AWAITING SIGNAL...</span>
     </div>
 
     <div class="viz-hub" id="gestureArea">
         <canvas id="circularViz"></canvas>
         <div class="center-core" id="core">⚡</div>
-        <div style="text-align: center; z-index: 10; margin-top: 20px; padding: 0 45px; width: 100%;">
-            <h2 id="title" style="font-size: 0.85rem; letter-spacing: 1.5px; margin: 0; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700;">LOAD YOUR VIBE</h2>
-            <div id="status" style="font-size: 0.5rem; color: var(--neon); margin-top: 5px; font-weight: bold; letter-spacing: 1px;">AWAITING SIGNAL</div>
+        <div style="text-align: center; z-index: 10; margin-top: 10px; width: 100%;">
+            <div id="status" style="font-size: 0.55rem; color: var(--neon); font-weight: bold; letter-spacing: 2px;">AWAITING SIGNAL</div>
         </div>
     </div>
 
@@ -278,15 +279,17 @@
         if(!songs[i]) return; idx = i;
         const name = songs[i].name.split('.')[0].toUpperCase();
         audio.src = URL.createObjectURL(songs[i].file);
-        document.getElementById('title').innerText = name;
-        document.getElementById('bgTitle').innerText = name + " • " + name + " • " + name;
+        
+        // Update scrolling background title only
+        document.getElementById('bgTitle').innerText = name + " • " + name + " • " + name + " • ";
+        document.getElementById('status').innerText = "NOW PLAYING";
 
         let nextIdx = isShuffle ? Math.floor(Math.random()*songs.length) : (idx + 1) % songs.length;
         document.getElementById('next-track-info').innerText = "NEXT: " + songs[nextIdx].name.split('.')[0].toUpperCase();
         
         initFX();
         audio.playbackRate = currentSpeed;
-        audio.preservesPitch = false; 
+        audio.preservesPitch = true; // Speed won't affect pitch now
         audio.play();
         document.getElementById('play-ui').innerText = '⏸';
         renderList();
@@ -341,16 +344,17 @@
 
         const cv = document.getElementById('circularViz');
         const cx = cv.getContext('2d');
-        cv.width = 320; cv.height = 320;
-        cx.clearRect(0,0,320,320);
+        cv.width = 400; cv.height = 400; // Increased Canvas internal resolution
+        cx.clearRect(0,0,400,400);
+        
         for(let i=0; i<80; i++) {
-            const r = 65 + (data[i] * 0.35);
+            const r = 80 + (data[i] * 0.45); // Larger bars
             const a = (i * Math.PI * 2) / 80;
-            cx.strokeStyle = 'rgba(0, 243, 255, 0.4)'; 
-            cx.lineWidth = 3; 
+            cx.strokeStyle = 'rgba(0, 243, 255, 0.5)'; 
+            cx.lineWidth = 4; 
             cx.beginPath(); 
-            cx.moveTo(160+Math.cos(a)*60, 160+Math.sin(a)*60); 
-            cx.lineTo(160+Math.cos(a)*r, 160+Math.sin(a)*r); 
+            cx.moveTo(200+Math.cos(a)*75, 200+Math.sin(a)*75); 
+            cx.lineTo(200+Math.cos(a)*r, 200+Math.sin(a)*r); 
             cx.stroke();
         }
 
@@ -368,6 +372,7 @@
 
     function tapPitch() { 
         currentPitch = currentPitch >= 2.0 ? 0.5 : parseFloat((currentPitch + 0.1).toFixed(1));
+        // Manually manipulating pitch using playbackRate while preservesPitch is false
         audio.preservesPitch = false; 
         audio.playbackRate = currentPitch;
         document.getElementById('p-val').innerText = currentPitch;
@@ -376,6 +381,7 @@
     function tapSpeed() { 
         const s = [1.0, 1.2, 1.5, 0.8]; 
         currentSpeed = s[(s.indexOf(currentSpeed)+1)%s.length];
+        audio.preservesPitch = true; // For normal speed change, keep pitch same
         audio.playbackRate = currentSpeed; 
         document.getElementById('s-val').innerText = currentSpeed; 
     }
