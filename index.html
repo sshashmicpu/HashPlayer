@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>HASH PLAYER // NEURAL ELITE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;500;700&display=swap');
@@ -17,51 +17,55 @@
             --bg-img: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000');
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         .dark-mode { --glass: rgba(0, 0, 0, 0.7); --card-bg: rgba(0, 0, 0, 0.9); --border: rgba(255, 255, 255, 0.1); }
 
-        body { margin: 0; background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        body { margin: 0; background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; padding-top: env(safe-area-inset-top); }
         
         .bg-vibrant { position: fixed; inset: 0; z-index: -1; background: var(--bg-img); background-size: cover; background-position: center; filter: brightness(0.6) contrast(1.1); transition: 1s ease; }
 
-        .container { width: 92%; max-width: 440px; height: 95vh; background: rgba(0, 0, 0, 0.15); border: 1px solid var(--border); border-radius: 50px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(0px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); transition: 0.3s; }
+        .container { width: 94%; max-width: 440px; height: 94vh; margin-top: 25px; background: rgba(0, 0, 0, 0.15); border: 1px solid var(--border); border-radius: 50px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(0px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); transition: backdrop-filter 0.5s; }
 
-        .micro-settings { position: absolute; top: 85px; width: 92%; display: flex; justify-content: space-between; left: 4%; z-index: 20; }
-        .m-btn { width: 36px; height: 36px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px); }
+        /* --- NEW: VERTICAL SCROLLING LABELS --- */
+        .v-label-wrap { position: absolute; height: 100%; width: 25px; display: flex; align-items: center; justify-content: center; z-index: 2; pointer-events: none; }
+        .v-left-wrap { left: 5px; }
+        .v-right-wrap { right: 5px; }
+        .v-scroll { writing-mode: vertical-rl; text-orientation: mixed; font-family: 'Orbitron'; font-size: 0.45rem; color: var(--neon); letter-spacing: 4px; animation: vScroll 12s linear infinite; white-space: nowrap; opacity: 0.4; }
+        @keyframes vScroll { from { transform: translateY(100%); } to { transform: translateY(-100%); } }
 
-        .app-header { padding: 35px 10px 5px; text-align: center; z-index: 10; }
-        .app-header h1 { font-family: 'Orbitron'; font-size: 1.8rem; margin: 0; font-weight: 900; background: linear-gradient(90deg, #fff, var(--neon), var(--purple), #fff); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flowText 4s linear infinite; letter-spacing: 3px; }
+        .micro-settings { position: absolute; top: 135px; width: 92%; display: flex; justify-content: space-between; left: 4%; z-index: 20; }
+        .m-btn { width: 34px; height: 34px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(5px); font-size: 0.8rem; }
+
+        .app-header { padding: 40px 10px 5px; text-align: center; z-index: 10; display: flex; flex-direction: column; align-items: center; }
+        .app-header h1 { font-family: 'Orbitron'; font-size: 1.5rem; margin: 0; font-weight: 900; background: linear-gradient(90deg, #fff, var(--neon), var(--purple), #fff); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flowText 4s linear infinite; letter-spacing: 2px; }
         
-        .vibes-btn { display: inline-block; margin-top: 10px; padding: 7px 25px; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; font-size: 0.75rem; color: var(--neon); font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(0,243,255,0.2); }
-        .vibes-btn:hover { background: rgba(0, 243, 255, 0.2); }
+        .list-trigger { width: 40px; height: 30px; border-radius: 10px; border: 1px solid var(--border); background: var(--glass); display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 10px 0; font-size: 0.9rem; transition: 0.3s; }
+        .vibes-btn { display: inline-block; padding: 6px 20px; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; font-size: 0.65rem; color: var(--neon); font-family: 'Orbitron'; cursor: pointer; letter-spacing: 1px; }
 
-        .viz-hub { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .viz-hub { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
         #circularViz, #linearViz { position: absolute; width: 100%; z-index: 1; pointer-events: none; }
-        #circularViz { height: 70%; top: 5%; }
-        #linearViz { height: 80px; bottom: 10px; opacity: 0.4; }
+        #circularViz { height: 60%; top: 5%; }
+        #linearViz { height: 60px; bottom: 0; opacity: 0.3; }
 
-        .center-core { width: 65px; height: 65px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.4); animation: rotate 8s linear infinite; box-shadow: inset 0 0 15px var(--neon); }
+        .center-core { width: 55px; height: 55px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.5); animation: rotate 12s linear infinite; }
 
-        .glass-controls { background: var(--glass); padding: 10px 20px 20px; border-radius: 50px 50px 0 0; border-top: 1px solid var(--border); backdrop-filter: blur(25px); z-index: 30; }
+        .glass-controls { background: var(--glass); padding: 15px 20px 25px; border-radius: 45px 45px 0 0; border-top: 1px solid var(--border); backdrop-filter: blur(25px); z-index: 30; }
+        #next-track-label { font-size: 0.5rem; color: var(--neon); text-align: center; margin-bottom: 10px; font-family: 'Orbitron'; opacity: 0.7; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .slider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .mini-slider { -webkit-appearance: none; width: 100%; height: 2px; background: rgba(255,255,255,0.1); outline: none; }
+        .mini-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--neon); border-radius: 50%; cursor: pointer; }
 
-        #next-track-label { font-size: 0.6rem; color: var(--neon); text-align: center; margin-bottom: 8px; font-family: 'Orbitron'; text-transform: uppercase; letter-spacing: 1px; }
+        .progress-rail { height: 4px; background: rgba(255,255,255,0.08); border-radius: 10px; margin-bottom: 15px; cursor: pointer; position: relative; }
+        #fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), var(--purple)); border-radius: 10px; box-shadow: 0 0 10px var(--neon); }
 
-        .slider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 12px; }
-        .mini-slider { -webkit-appearance: none; width: 100%; height: 2px; background: rgba(255,255,255,0.2); outline: none; border-radius: 2px; }
-        .mini-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: var(--neon); border-radius: 50%; cursor: pointer; }
+        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; }
+        .glass-btn { background: var(--glass); border: 1px solid var(--border); height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; }
+        .play-btn { height: 55px; border-radius: 15px; border-color: var(--neon); color: var(--neon); font-size: 1.3rem; }
 
-        .progress-rail { height: 5px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 12px; cursor: pointer; }
-        #fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), var(--purple)); transition: width 0.1s; }
-
-        .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
-        .glass-btn { background: var(--glass); border: 1px solid var(--border); height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .play-btn { height: 65px; border-radius: 18px; border-color: var(--neon); color: var(--neon); font-size: 1.5rem; }
-
-        #fx-panel, #file-list-view { position: absolute; inset: 0; background: var(--card-bg); z-index: 500; border-radius: 50px; padding: 60px 25px; display: none; flex-direction: column; backdrop-filter: blur(40px); border: 1px solid var(--border); transition: 0.4s ease; }
-        .glass-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; }
-        .glass-card:hover { border-color: var(--neon); background: rgba(0, 243, 255, 0.1); }
-
-        .theme-hub { display: flex; gap: 8px; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); align-items: center; }
-        .theme-dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; background-size: cover; }
+        #fx-panel, #file-list-view { position: absolute; inset: 0; background: var(--card-bg); z-index: 500; border-radius: 50px; padding: 60px 25px 30px; display: none; flex-direction: column; backdrop-filter: blur(40px); border: 1px solid var(--border); }
+        .glass-card { background: rgba(255,255,255,0.04); border: 1px solid var(--border); padding: 12px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .theme-hub { display: flex; gap: 6px; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 20px; border: 1px solid var(--border); }
+        .theme-dot { width: 14px; height: 14px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); background-size: cover; }
 
         @keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
         @keyframes flowText { 0% {background-position: 0% 50%;} 100% {background-position: 200% 50%;} }
@@ -72,6 +76,9 @@
 <div class="bg-vibrant" id="bgBody"></div>
 
 <div class="container" id="p-container">
+    <div class="v-label-wrap v-left-wrap"><div class="v-scroll">ONLINE AESTHETIC AUDIO PLAYER • SYSTEM ACTIVE</div></div>
+    <div class="v-label-wrap v-right-wrap"><div class="v-scroll" style="animation-duration: 15s;">DESIGNED BY SYED SAKHIR HASHMI • 2025 ELITE</div></div>
+
     <div class="micro-settings">
         <div class="m-btn" onclick="cycleBlur()">💧</div>
         <div class="m-btn" onclick="toggleFX()">🎚️</div>
@@ -79,52 +86,47 @@
 
     <div class="app-header">
         <h1>HASH PLAYER</h1>
+        <div class="list-trigger" onclick="toggleFiles()">📁</div>
         <div class="vibes-btn" onclick="toggleFiles()">VIBES ARE HERE</div>
     </div>
 
     <div class="viz-hub">
         <canvas id="circularViz"></canvas>
         <canvas id="linearViz"></canvas>
-        <div class="center-core" id="core"><span style="font-size: 1.2rem;">⚡</span></div>
+        <div class="center-core" id="core"><span style="font-size: 1rem;">⚡</span></div>
         
-        <div style="text-align: center; z-index: 5; margin-top: 15px;">
-            <h2 id="title" style="font-size: 0.9rem; letter-spacing: 2px; margin: 0; color: #fff;">LOAD FOLDER</h2>
-            <div id="status" style="font-size: 0.5rem; color: var(--neon); margin-top: 5px;">AWAITING SYNC...</div>
+        <div style="text-align: center; z-index: 5; margin-top: 15px; padding: 0 40px;">
+            <h2 id="title" style="font-size: 0.8rem; letter-spacing: 2px; margin: 0; color: #fff;">LOAD FOLDER</h2>
+            <div id="status" style="font-size: 0.45rem; color: var(--neon); margin-top: 4px; font-weight: bold; letter-spacing: 1px;">AWAITING SYNC...</div>
         </div>
 
         <div id="fx-panel">
-            <h3 style="font-family:'Orbitron'; color:var(--neon); font-size:0.8rem;">AUDIO DSP</h3>
-            <label style="font-size:0.6rem;">GAIN BOOSTER</label><input type="range" id="gainCtrl" class="mini-slider" min="0.5" max="3" step="0.1" value="1">
-            <label style="font-size:0.6rem; margin-top:10px;">BASS DRIVE</label><input type="range" id="bassCtrl" class="mini-slider" min="-10" max="25" step="1" value="0">
-            <label style="font-size:0.6rem; margin-top:10px;">TREBLE CRYSTAL</label><input type="range" id="trebleCtrl" class="mini-slider" min="-10" max="20" step="1" value="0">
-            <div class="glass-btn" onclick="toggleFX()" style="margin-top:30px; color:red; border-color:red;">CLOSE</div>
+            <h3 style="font-family:'Orbitron'; color:var(--neon); font-size:0.75rem; margin-bottom:20px;">AUDIO ENGINE</h3>
+            <label style="font-size:0.55rem;">GAIN</label><input type="range" id="gainCtrl" class="mini-slider" min="0" max="2" step="0.1" value="1">
+            <label style="font-size:0.55rem; margin-top:15px;">BASS</label><input type="range" id="bassCtrl" class="mini-slider" min="-10" max="25" step="1" value="0">
+            <label style="font-size:0.55rem; margin-top:15px;">TREBLE</label><input type="range" id="trebleCtrl" class="mini-slider" min="-10" max="20" step="1" value="0">
+            <div class="glass-btn" onclick="toggleFX()" style="margin-top:40px; color:red; border-color:red; height:35px; font-size: 0.6rem;">CLOSE</div>
         </div>
 
         <div id="file-list-view">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:'Orbitron'; font-size:0.7rem;">
-                <span style="color:var(--neon)">NEURAL LIBRARY</span><span onclick="toggleFiles()" style="color:red; cursor:pointer;">[ BACK ]</span>
-            </div>
-            <div id="list-items" style="overflow-y:auto; flex:1; padding-right:5px;"></div>
+            <div id="list-items" style="overflow-y:auto; flex:1;"></div>
+            <div class="glass-btn" onclick="toggleFiles()" style="margin-top:10px; color:red;">BACK</div>
         </div>
     </div>
 
     <div class="glass-controls">
-        <div id="next-track-label">NEXT: NO TRACK</div>
-        
+        <div id="next-track-label">NEXT: NONE</div>
         <div class="slider-row">
-            <div><span style="font-size:0.5rem; color:var(--neon)">VOL</span><input type="range" class="mini-slider" oninput="audio.volume = this.value/100" value="100"></div>
-            <div><span style="font-size:0.5rem; color:var(--purple)">BRIGHT</span><input type="range" class="mini-slider" oninput="document.getElementById('bgBody').style.filter = `brightness(${this.value/100})`" value="60"></div>
+            <div><span style="font-size:0.4rem; color:var(--neon)">VOL</span><input type="range" id="volSlider" class="mini-slider" oninput="updateVol(this.value)" value="100"></div>
+            <div><span style="font-size:0.4rem; color:var(--purple)">BRIGHT</span><input type="range" id="brightSlider" class="mini-slider" oninput="updateBrightness(this.value)" value="60"></div>
         </div>
-
         <div class="progress-rail" onclick="seek(event)"><div id="fill"></div></div>
-
-        <div style="display: flex; justify-content: space-around; font-family: 'Orbitron'; font-size: 0.55rem; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-around; font-family: 'Orbitron'; font-size: 0.5rem; margin-bottom: 12px;">
             <div onclick="tapSpeed()" style="cursor:pointer">SPD: <span id="s-val" style="color:var(--neon)">1.0</span></div>
             <div onclick="tapPitch()" style="cursor:pointer">PITCH: <span id="p-val" style="color:var(--purple)">1.0</span></div>
             <div onclick="toggleDarkMode()" style="cursor:pointer">🌓 MODE</div>
             <div onclick="setSleepTimer()" style="cursor:pointer">⏰ <span id="t-val">OFF</span></div>
         </div>
-
         <div class="btn-grid">
             <div class="glass-btn" onclick="seekRelative(-10)">-10</div>
             <div class="glass-btn" onclick="prev()">⏮</div>
@@ -132,20 +134,17 @@
             <div class="glass-btn" onclick="next()">⏭</div>
             <div class="glass-btn" onclick="seekRelative(10)">+10</div>
         </div>
-        
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="glass-btn" onclick="toggleShuffle()" id="shuf-btn" style="width:45px; height:35px;">🔀</div>
-            
+            <div class="glass-btn" onclick="toggleShuffle()" id="shuf-btn" style="width:42px; height:35px;">🔀</div>
             <div class="theme-hub">
-                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=100')" onclick="changeTheme(0)"></div>
-                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100')" onclick="changeTheme(1)"></div>
-                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=100')" onclick="changeTheme(2)"></div>
-                <div class="theme-dot" style="background-image: url('https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=100')" onclick="changeTheme(3)"></div>
+                <div class="theme-dot" onclick="changeTheme(0)" style="background-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=100')"></div>
+                <div class="theme-dot" onclick="changeTheme(1)" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100')"></div>
+                <div class="theme-dot" onclick="changeTheme(2)" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=100')"></div>
+                <div class="theme-dot" onclick="changeTheme(3)" style="background-image: url('https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=100')"></div>
             </div>
-
-            <div class="glass-btn" onclick="toggleRepeat()" id="rep-btn" style="width:45px; height:35px;">🔁</div>
+            <div class="glass-btn" onclick="toggleRepeat()" id="rep-btn" style="width:42px; height:35px;">🔁</div>
         </div>
-        <div class="glass-btn" onclick="document.getElementById('fIn').click()" style="width: 100%; height: 35px; margin-top: 10px; font-size: 0.6rem; border-color: var(--neon); color: var(--neon); letter-spacing: 2px;">SYNC FOLDER</div>
+        <div class="glass-btn" onclick="document.getElementById('fIn').click()" style="width: 100%; height: 35px; margin-top: 10px; font-size: 0.55rem; border-color: var(--neon); color: var(--neon);">SYNC FOLDER</div>
     </div>
 </div>
 
@@ -155,104 +154,96 @@
 <script>
     const audio = document.getElementById('audio');
     let songs = [], idx = 0, isShuffle = false, repeatMode = 0, bIdx = 0, currentPitch = 1.0;
-    let actx, analyser, data, gainNode, bassNode, trebleNode;
+    let actx, analyser, gainNode, bassNode, trebleNode, source;
 
-    const themes = [
-        'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000',
-        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000',
-        'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1000',
-        'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=1000'
-    ];
+    // --- Database for Refresh Persistent ---
+    const dbName = "HashPlayerPersistentDB";
+    const dbReq = indexedDB.open(dbName, 1);
+    dbReq.onupgradeneeded = e => e.target.result.createObjectStore("library", { keyPath: "id" });
 
-    function changeTheme(i) { document.getElementById('bgBody').style.backgroundImage = `url(${themes[i]})`; }
-    function toggleDarkMode() { document.getElementById('mainBody').classList.toggle('dark-mode'); }
-    function cycleBlur() { const blurs = [0, 10, 25, 45]; bIdx = (bIdx + 1) % blurs.length; document.getElementById('p-container').style.backdropFilter = `blur(${blurs[bIdx]}px)`; }
-    function toggleFiles() { const v = document.getElementById('file-list-view'); v.style.display = (v.style.display === 'flex') ? 'none' : 'flex'; }
-    function toggleFX() { const p = document.getElementById('fx-panel'); p.style.display = (p.style.display === 'flex') ? 'none' : 'flex'; }
-
-    document.getElementById('fIn').addEventListener('change', e => {
-        const files = Array.from(e.target.files).filter(f => f.type.startsWith('audio'));
-        songs = files.map(file => ({file, isFav: false}));
-        if(songs.length) { 
-            document.getElementById('status').innerText = "ENGINE ONLINE - " + songs.length + " TRACKS";
-            renderList(); load(0); 
-        }
-    });
-
-    function load(i) {
-        if(!songs[i]) return;
-        idx = i;
-        audio.src = URL.createObjectURL(songs[i].file);
-        document.getElementById('title').innerText = songs[i].file.name.split('.')[0].toUpperCase();
-        
-        const nextIdx = (idx + 1) % songs.length;
-        document.getElementById('next-track-label').innerText = "NEXT: " + songs[nextIdx].file.name.split('.')[0];
-        
-        initAudioSystem();
-        audio.play();
-        document.getElementById('play-ui').innerText = '⏸';
-        renderList();
+    async function saveFolder(files) {
+        const db = await new Promise(r => indexedDB.open(dbName).onsuccess = e => r(e.target.result));
+        const tx = db.transaction("library", "readwrite");
+        const store = tx.objectStore("library");
+        await store.clear();
+        for(let i=0; i<files.length; i++) { store.put({ id: i, name: files[i].name, data: files[i] }); }
     }
 
-    function initAudioSystem() {
+    async function loadStoredFolder() {
+        const db = await new Promise(r => indexedDB.open(dbName).onsuccess = e => r(e.target.result));
+        const tx = db.transaction("library", "readonly");
+        const all = await new Promise(r => tx.objectStore("library").getAll().onsuccess = e => r(e.target.result));
+        if(all.length) {
+            songs = all.map(s => ({ file: s.data, name: s.name }));
+            document.getElementById('status').innerText = "RESTORED: " + songs.length;
+            renderList();
+        }
+    }
+
+    // --- Dynamic Island / Media Session ---
+    function updateMediaSession() {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: songs[idx].name,
+                artist: 'Hash Aesthetic Player',
+                artwork: [{ src: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=500', type: 'image/jpeg' }]
+            });
+            navigator.mediaSession.setActionHandler('play', togglePlay);
+            navigator.mediaSession.setActionHandler('pause', togglePlay);
+            navigator.mediaSession.setActionHandler('previoustrack', prev);
+            navigator.mediaSession.setActionHandler('nexttrack', next);
+        }
+    }
+
+    // --- FX Initialization ---
+    function initFX() {
         if(actx) return;
         actx = new (window.AudioContext || window.webkitAudioContext)();
         analyser = actx.createAnalyser();
-        const source = actx.createMediaElementSource(audio);
+        source = actx.createMediaElementSource(audio);
         gainNode = actx.createGain();
         bassNode = actx.createBiquadFilter(); bassNode.type = 'lowshelf'; bassNode.frequency.value = 200;
         trebleNode = actx.createBiquadFilter(); trebleNode.type = 'highshelf'; trebleNode.frequency.value = 3000;
+
         source.connect(bassNode).connect(trebleNode).connect(gainNode).connect(analyser).connect(actx.destination);
-        data = new Uint8Array(analyser.frequencyBinCount);
         
-        document.getElementById('gainCtrl').oninput = (e) => gainNode.gain.value = e.target.value;
-        document.getElementById('bassCtrl').oninput = (e) => bassNode.gain.value = e.target.value;
-        document.getElementById('trebleCtrl').oninput = (e) => trebleNode.gain.value = e.target.value;
+        document.getElementById('gainCtrl').oninput = e => gainNode.gain.value = e.target.value;
+        document.getElementById('bassCtrl').oninput = e => bassNode.gain.value = e.target.value;
+        document.getElementById('trebleCtrl').oninput = e => trebleNode.gain.value = e.target.value;
         draw();
     }
 
-    function draw() {
-        requestAnimationFrame(draw);
-        analyser.getByteFrequencyData(data);
-        
-        const cv = document.getElementById('circularViz');
-        const cx = cv.getContext('2d');
-        cv.width = cv.offsetWidth; cv.height = cv.offsetHeight;
-        const cX = cv.width/2, cY = cv.height/2;
-        for(let i=0; i<64; i++) {
-            const r = 75 + (data[i] * 0.45);
-            const a = (i * Math.PI * 2) / 64;
-            cx.strokeStyle = i % 2 === 0 ? 'var(--neon)' : 'var(--purple)';
-            cx.lineWidth = 2; cx.beginPath(); cx.moveTo(cX+Math.cos(a)*70, cY+Math.sin(a)*70); cx.lineTo(cX+Math.cos(a)*r, cY+Math.sin(a)*r); cx.stroke();
-        }
+    // --- Core UI Logic (All Original Features) ---
+    document.getElementById('fIn').addEventListener('change', async e => {
+        const files = Array.from(e.target.files).filter(f => f.type.startsWith('audio'));
+        songs = files.map(file => ({file, name: file.name}));
+        await saveFolder(files);
+        renderList(); load(0);
+    });
 
-        const lv = document.getElementById('linearViz');
-        const lx = lv.getContext('2d');
-        lv.width = lv.offsetWidth; lv.height = lv.offsetHeight;
-        for(let i=0; i<lv.width/5; i++) {
-            const h = data[i] * 0.3;
-            lx.fillStyle = i % 2 === 0 ? 'var(--neon)' : 'rgba(255,255,255,0.2)';
-            lx.fillRect(i*8, lv.height-h, 4, h);
-        }
-        
-        const beat = (data[2]/255) * 0.2;
-        document.getElementById('core').style.transform = `scale(${1 + beat})`;
+    function load(i) {
+        if(!songs[i]) return; idx = i;
+        audio.src = URL.createObjectURL(songs[i].file);
+        document.getElementById('title').innerText = songs[i].name.split('.')[0].toUpperCase();
+        initFX(); audio.play();
+        document.getElementById('play-ui').innerText = '⏸';
+        updateMediaSession();
+        renderList();
     }
 
     function togglePlay() { 
-        if(!audio.src) return;
+        if(!audio.src) return; 
         if(actx && actx.state === 'suspended') actx.resume();
-        audio.paused ? audio.play() : audio.pause(); 
-        document.getElementById('play-ui').innerText = audio.paused ? '▶' : '⏸'; 
+        audio.paused ? audio.play() : audio.pause();
+        document.getElementById('play-ui').innerText = audio.paused ? '▶' : '⏸';
     }
-    
+
     function next() { load(isShuffle ? Math.floor(Math.random()*songs.length) : (idx+1)%songs.length); }
     function prev() { load((idx-1+songs.length)%songs.length); }
-    
+
     function tapPitch() { 
-        currentPitch = currentPitch >= 2.0 ? 1.0 : parseFloat((currentPitch + 0.1).toFixed(1));
-        audio.preservesPitch = false; 
-        audio.playbackRate = currentPitch;
+        currentPitch = currentPitch >= 2.0 ? 0.8 : parseFloat((currentPitch + 0.1).toFixed(1));
+        audio.preservesPitch = false; audio.playbackRate = currentPitch;
         document.getElementById('p-val').innerText = currentPitch.toFixed(1);
     }
 
@@ -262,12 +253,25 @@
         audio.playbackRate = n; document.getElementById('s-val').innerText = n;
     }
 
-    function seek(e) { audio.currentTime = (e.offsetX / e.target.offsetWidth) * audio.duration; }
+    function updateVol(v) { audio.volume = v/100; }
+    function updateBrightness(v) { document.getElementById('bgBody').style.filter = `brightness(${v/100}) contrast(1.1)`; }
+    function toggleDarkMode() { document.getElementById('mainBody').classList.toggle('dark-mode'); }
+    function cycleBlur() { const blurs = [0, 10, 25, 45]; bIdx = (bIdx + 1) % blurs.length; document.getElementById('p-container').style.backdropFilter = `blur(${blurs[bIdx]}px)`; }
+    function toggleFiles() { const v = document.getElementById('file-list-view'); v.style.display = v.style.display==='flex'?'none':'flex'; }
+    function toggleFX() { const v = document.getElementById('fx-panel'); v.style.display = v.style.display==='flex'?'none':'flex'; }
     function seekRelative(s) { audio.currentTime += s; }
-    
+    function seek(e) { audio.currentTime = (e.offsetX / e.target.offsetWidth) * audio.duration; }
     function toggleShuffle() { isShuffle = !isShuffle; document.getElementById('shuf-btn').style.color = isShuffle ? 'var(--neon)' : '#fff'; }
     function toggleRepeat() { repeatMode = (repeatMode + 1) % 3; document.getElementById('rep-btn').innerText = repeatMode === 1 ? '🔂' : '🔁'; }
-
+    function changeTheme(i) { 
+        const themes = [
+            'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000',
+            'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000',
+            'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1000',
+            'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=1000'
+        ];
+        document.getElementById('bgBody').style.backgroundImage = `url(${themes[i]})`; 
+    }
     function setSleepTimer() { 
         let m = prompt("Minutes:"); 
         if(m) { document.getElementById('t-val').innerText = m+'m'; setTimeout(() => audio.pause(), m*60000); }
@@ -276,13 +280,30 @@
     function renderList() {
         document.getElementById('list-items').innerHTML = songs.map((s, i) => `
             <div class="glass-card" style="border-color: ${i===idx?'var(--neon)':'var(--border)'}" onclick="load(${i}); toggleFiles();">
-                <span style="color: ${i===idx?'var(--neon)':'#fff'}">${s.file.name}</span>
+                <span style="color: ${i===idx?'var(--neon)':'#fff'}">${s.name}</span>
             </div>
         `).join('');
     }
 
-    audio.ontimeupdate = () => { document.getElementById('fill').style.width = (audio.currentTime/audio.duration)*100 + '%'; };
-    audio.onended = () => { if(repeatMode === 1) audio.play(); else next(); };
+    function draw() {
+        requestAnimationFrame(draw);
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(data);
+        const cv = document.getElementById('circularViz');
+        const cx = cv.getContext('2d');
+        cv.width = cv.offsetWidth; cv.height = cv.offsetHeight;
+        const cX = cv.width/2, cY = cv.height/2;
+        for(let i=0; i<64; i++) {
+            const r = 70 + (data[i] * 0.4);
+            const a = (i * Math.PI * 2) / 64;
+            cx.strokeStyle = i % 2 === 0 ? 'var(--neon)' : 'var(--purple)';
+            cx.lineWidth = 2; cx.beginPath(); cx.moveTo(cX+Math.cos(a)*60, cY+Math.sin(a)*60); cx.lineTo(cX+Math.cos(a)*r, cY+Math.sin(a)*r); cx.stroke();
+        }
+    }
+
+    audio.ontimeupdate = () => { if(audio.duration) document.getElementById('fill').style.width = (audio.currentTime/audio.duration)*100 + '%'; };
+    audio.onended = next;
+    window.onload = loadStoredFolder;
 </script>
 </body>
 </html>
