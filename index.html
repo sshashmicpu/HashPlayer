@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>HASH PLAYER // NEURAL ELITE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;500;700&display=swap');
@@ -16,54 +18,33 @@
             --bg-img: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000');
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         .dark-mode { --glass: rgba(0, 0, 0, 0.3); --card-bg: rgba(0, 0, 0, 0.3); --border: rgba(255, 255, 255, 0.1); }
 
-        body { margin: 0; background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; padding-top: env(safe-area-inset-top); }
+        body { margin: 0; background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; padding-top: env(safe-area-inset-top); transition: background 0.3s ease; }
         
         .bg-vibrant { position: fixed; inset: 0; z-index: -1; background: var(--bg-img); background-size: cover; background-position: center; filter: brightness(0.6) contrast(1.1); transition: 1s ease; }
 
-        /* Reduced top margin for container */
-        .container { width: 94%; max-width: 440px; height: 96vh; margin-top: 5px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 50px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(15px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+        .container { width: 94%; max-width: 440px; height: 98vh; margin-top: 5px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 40px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
 
-        /* TRACK TITLE - Back Scroll, Centered behind Viz */
-        .marquee-bg {
-            position: absolute;
-            top: 45%; 
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 140%;
-            overflow: hidden;
-            white-space: nowrap;
-            z-index: 1;
-            opacity: 0.12;
-            pointer-events: none;
-        }
-        .marquee-content {
-            display: inline-block;
-            font-family: 'Orbitron';
-            font-size: 6rem;
-            font-weight: 900;
-            color: #fff;
-            animation: ultraSlowScroll 50s linear infinite;
-        }
-        @keyframes ultraSlowScroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+        .marquee-bg { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 140%; overflow: hidden; white-space: nowrap; z-index: 1; opacity: 0.12; pointer-events: none; }
+        .marquee-content { display: inline-block; font-family: 'Orbitron'; font-size: 6rem; font-weight: 900; color: #fff; animation: ultraSlowScroll 50s linear infinite; }
+        @keyframes ultraSlowScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        .v-label-wrap { position: absolute; height: 35%; width: 40px; display: flex; align-items: center; justify-content: center; z-index: 40; pointer-events: none; top: 190px; left: 5px; overflow: hidden; }
-        .v-scroll { writing-mode: vertical-rl; text-orientation: mixed; font-family: 'Orbitron'; font-size: 0.42rem; color: var(--neon); letter-spacing: 2px; animation: vScroll 15s linear infinite; white-space: nowrap; opacity: 0.7; font-weight: bold; border-left: 1px solid rgba(0, 243, 255, 0.3); }
+        .v-label-wrap { position: absolute; height: 40%; width: 40px; display: flex; align-items: center; justify-content: center; z-index: 40; pointer-events: none; top: 180px; left: 5px; overflow: hidden; }
+        .v-scroll { writing-mode: vertical-rl; text-orientation: mixed; font-family: 'Orbitron'; font-size: 0.45rem; color: var(--neon); letter-spacing: 2px; animation: vScroll 18s linear infinite; white-space: nowrap; opacity: 0.8; font-weight: bold; border-left: 1px solid rgba(0, 243, 255, 0.3); }
         @keyframes vScroll { from { transform: translateY(100%); } to { transform: translateY(-100%); } }
 
-        /* DB Meter moved to avoid header overlap */
         .freq-meter { position: absolute; top: 85px; right: 25px; font-family: 'Orbitron'; font-size: 0.55rem; color: var(--neon); text-align: right; z-index: 10; line-height: 1.4; opacity: 0.8; }
-
+        #neural-tag { font-size: 0.4rem; color: var(--purple); margin-top: 4px; display: block; }
+        
         #next-track-info { font-size: 0.5rem; color: #fff; text-align: center; margin-bottom: 8px; font-weight: 300; animation: glowPulse 2s infinite alternate; }
         @keyframes glowPulse { from { text-shadow: 0 0 2px #fff; opacity: 0.5; } to { text-shadow: 0 0 10px var(--neon); opacity: 1; color: var(--neon); } }
 
-        .micro-settings { position: absolute; top: 120px; width: 90%; display: flex; justify-content: space-between; left: 5%; z-index: 20; }
-        .m-btn { width: 34px; height: 34px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(5px); }
+        .micro-settings { position: absolute; top: 120px; width: 90%; display: flex; justify-content: space-between; left: 5%; z-index: 20; gap: 8px; }
+        .m-btn { width: 34px; height: 34px; background: var(--glass); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(5px); transition: 0.3s; }
+        .m-btn:active { transform: scale(0.9); border-color: var(--neon); }
+        .sr-btn { font-family: 'Orbitron'; font-size: 0.5rem; color: var(--purple); font-weight: bold; width: 45px; }
 
         .app-header { padding: 30px 10px 5px; text-align: center; z-index: 10; }
         .app-header h1 { font-family: 'Orbitron'; font-size: 1.6rem; margin: 0; font-weight: 900; background: linear-gradient(90deg, #fff, var(--neon), var(--purple), #fff); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flowText 4s linear infinite; letter-spacing: 2px; }
@@ -72,40 +53,50 @@
         .vibes-btn { display: inline-block; padding: 6px 22px; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; font-size: 0.65rem; color: var(--neon); font-family: 'Orbitron'; cursor: pointer; }
         .list-trigger { font-size: 1.2rem; cursor: pointer; margin-top: 5px; filter: drop-shadow(0 0 5px var(--neon)); }
 
-        /* Visualizer Larger Size */
-        .viz-hub { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: visible; touch-action: none; z-index: 5; }
-        #circularViz { position: absolute; width: 380px; height: 380px; z-index: 2; pointer-events: none; }
-        .center-core { width: 70px; height: 70px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.6); box-shadow: 0 0 25px var(--neon); font-size: 1.4rem; }
+        .viz-hub { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: visible; touch-action: none; z-index: 5; width: 100%; }
+        
+        /* CHOTA CIRCULAR VIZ */
+        #circularViz { position: absolute; width: 280px; height: 280px; z-index: 2; pointer-events: none; }
+        
+        /* BARRA VIDEO CARD (HEIGHT INCREASED) */
+        #video-container { 
+            position: relative; width: 96%; aspect-ratio: 16/10; background: #000; 
+            border-radius: 15px; border: 1px solid var(--neon); overflow: hidden; 
+            display: none; z-index: 100; box-shadow: 0 0 30px rgba(0,243,255,0.3);
+            max-width: 98%;
+        }
+        video#player { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+
+        .center-core { width: 60px; height: 60px; border: 2px solid var(--neon); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.6); box-shadow: 0 0 20px var(--neon); font-size: 1.2rem; transition: 0.1s ease; }
 
         .lin-viz-box { width: 100%; height: 30px; display: flex; align-items: flex-end; justify-content: center; gap: 3px; padding: 0 40px; margin-bottom: 10px; }
         .bar { width: 4px; border-radius: 2px; transition: height 0.05s ease; }
 
-        /* Increased Bottom Padding */
-        .glass-controls { background: var(--glass); padding: 25px 25px 40px; border-radius: 45px 45px 0 0; border-top: 1px solid var(--border); backdrop-filter: blur(25px); z-index: 50; }
+        .glass-controls { background: var(--glass); padding: 25px 25px 40px; border-radius: 40px 40px 0 0; border-top: 1px solid var(--border); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 50; }
         
         #fx-panel, #file-list-view { 
-            position: absolute; top: 15%; left: 7%; width: 86%; height: 70%;
-            background: rgba(255, 255, 255, 0.12); z-index: 500; border-radius: 35px; 
+            position: absolute; top: 10%; left: 5%; width: 90%; height: 80%;
+            background: rgba(10, 10, 10, 0.85); z-index: 500; border-radius: 30px; 
             padding: 25px; display: none; flex-direction: column; 
-            backdrop-filter: blur(20px); border: 1px solid var(--border); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid var(--border); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        .search-box { width: 100%; padding: 10px 15px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); border-radius: 15px; color: #fff; font-family: 'Rajdhani'; font-size: 0.85rem; margin-bottom: 15px; outline: none; }
-        .track-item { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; transition: 0.3s; font-size: 0.8rem; display: flex; align-items: center; }
-        .track-item.active { border-color: var(--neon); background: rgba(0, 243, 255, 0.1); }
+        .search-box { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); border-radius: 15px; color: #fff; font-family: 'Rajdhani'; font-size: 0.9rem; margin-bottom: 15px; }
+        .track-item { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 15px; border-radius: 15px; margin-bottom: 8px; cursor: pointer; font-size: 0.85rem; }
+        .track-item.active { border-color: var(--neon); background: rgba(0, 243, 255, 0.15); }
 
         .slider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .slider-label { font-size: 0.45rem; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 4px; display: block; }
-        .mini-slider { -webkit-appearance: none; width: 100%; height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; }
-        .mini-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--neon); border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px var(--neon); }
+        .slider-label { font-size: 0.5rem; color: var(--neon); font-family: 'Orbitron'; margin-bottom: 4px; display: block; }
+        .mini-slider { -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 5px; }
+        .mini-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--neon); border-radius: 50%; box-shadow: 0 0 10px var(--neon); }
 
         .btn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; }
-        .glass-btn { background: var(--glass); border: 1px solid var(--border); height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; backdrop-filter: blur(5px); }
-        .play-btn { height: 52px; border: 1px solid var(--neon); color: var(--neon); font-size: 1.4rem; }
+        .glass-btn { background: var(--glass); border: 1px solid var(--border); height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; }
+        .play-btn { height: 54px; border: 1px solid var(--neon); color: var(--neon); font-size: 1.5rem; }
 
-        .theme-hub { display: flex; gap: 6px; background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); overflow-x: auto; max-width: 160px; }
-        .theme-dot { min-width: 18px; height: 18px; border-radius: 50%; border: 1px solid #fff; background-size: cover; cursor: pointer; }
+        .theme-hub { display: flex; gap: 8px; background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); overflow-x: auto; max-width: 160px; scrollbar-width: none; }
+        .theme-dot { min-width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #fff; background-size: cover; cursor: pointer; }
         @keyframes flowText { 0% {background-position: 0% 50%;} 100% {background-position: 200% 50%;} }
     </style>
 </head>
@@ -115,13 +106,19 @@
 
 <div class="container" id="p-container">
     <div class="v-label-wrap">
-        <div class="v-scroll">ONLINE AESTHETIC AUDIO PLAYER - DESIGNED BY SYED SAKHIR HASHMI</div>
+        <div class="v-scroll">ONLINE AESTHETIC PLAYER - DESIGNED BY SYED SAKHIR HASHMI • VIBES ARE HERE • NEURAL ELITE </div>
     </div>
 
-    <div class="freq-meter" id="freqMeter">HZ: 000<br>DB: -60</div>
-
+    <div class="freq-meter" id="freqMeter">
+        HZ: 000<br>DB: -60
+        <span id="neural-tag">NEURAL: OFF</span>
+    </div>
+    
     <div class="micro-settings">
-        <div class="m-btn" onclick="cycleBlur()">💧</div>
+        <div style="display:flex; gap:8px;">
+            <div class="m-btn" onclick="cycleBlur()">💧</div>
+            <div class="m-btn sr-btn" onclick="applySlowedReverb()">S+R</div>
+        </div>
         <div class="m-btn" onclick="toggleFX()">🎚️</div>
     </div>
 
@@ -133,46 +130,37 @@
         </div>
     </div>
 
-    <div class="marquee-bg">
-        <span class="marquee-content" id="bgTitle">AWAITING SIGNAL... AWAITING SIGNAL...</span>
-    </div>
-
+    <div class="marquee-bg"><span class="marquee-content" id="bgTitle">START THE ENGINE...</span></div>
+    
     <div class="viz-hub" id="gestureArea">
         <canvas id="circularViz"></canvas>
+        <div id="video-container">
+            <video id="player" crossorigin="anonymous" playsinline></video>
+        </div>
         <div class="center-core" id="core">⚡</div>
         <div style="text-align: center; z-index: 10; margin-top: 10px; width: 100%;">
-            <div id="status" style="font-size: 0.55rem; color: var(--neon); font-weight: bold; letter-spacing: 2px;">AWAITING SIGNAL</div>
+            <div id="status" style="font-size: 0.55rem; color: var(--neon); font-weight: bold; letter-spacing: 2px;">READY</div>
         </div>
     </div>
 
     <div class="lin-viz-box" id="linViz"></div>
 
     <div class="glass-controls">
-        <div id="timer-display" style="font-size: 0.65rem; color: var(--neon); text-align: center; font-family: 'Orbitron'; margin-bottom: 4px;">0:00 / 0:00</div>
+        <div id="timer-display" style="font-size: 0.7rem; color: var(--neon); text-align: center; font-family: 'Orbitron'; margin-bottom: 6px;">0:00 / 0:00</div>
         <div id="next-track-info">NEXT: NONE</div>
-        
         <div class="slider-row">
-            <div>
-                <span class="slider-label">VOLUME</span>
-                <input type="range" id="volSlider" class="mini-slider" oninput="updateVol(this.value)" value="100">
-            </div>
-            <div>
-                <span class="slider-label">BRIGHTNESS</span>
-                <input type="range" id="brightSlider" class="mini-slider" oninput="updateBrightness(this.value)" value="60">
-            </div>
+            <div><span class="slider-label">VOL</span><input type="range" id="volSlider" class="mini-slider" oninput="updateVol(this.value)" value="100"></div>
+            <div><span class="slider-label">LUX</span><input type="range" id="brightSlider" class="mini-slider" oninput="updateBrightness(this.value)" value="60"></div>
         </div>
-        
-        <div class="progress-rail" onclick="seek(event)" style="height:4px; background:rgba(255,255,255,0.1); border-radius:10px; margin-bottom:15px; cursor:pointer;">
+        <div class="progress-rail" onclick="seek(event)" style="height:6px; background:rgba(255,255,255,0.1); border-radius:10px; margin-bottom:18px; cursor:pointer;">
             <div id="fill" style="height:100%; width:0%; background:linear-gradient(90deg, var(--neon), var(--purple)); border-radius:10px; box-shadow:0 0 10px var(--neon);"></div>
         </div>
-        
-        <div style="display: flex; justify-content: space-around; font-family: 'Orbitron'; font-size: 0.55rem; margin-bottom: 15px; opacity:0.8;">
-            <div onclick="tapSpeed()" style="cursor:pointer">SPD: <span id="s-val" style="color:var(--neon)">1.0</span></div>
-            <div onclick="tapPitch()" style="cursor:pointer">PITCH: <span id="p-val" style="color:var(--purple)">1.0</span></div>
-            <div onclick="toggleDarkMode()" style="cursor:pointer">🌓 MODE</div>
-            <div onclick="setSleepTimer()" style="cursor:pointer">⏰ <span id="t-val">OFF</span></div>
+        <div style="display: flex; justify-content: space-around; font-family: 'Orbitron'; font-size: 0.6rem; margin-bottom: 15px;">
+            <div onclick="tapSpeed()">SPD: <span id="s-val" style="color:var(--neon)">1.0</span></div>
+            <div onclick="tapPitch()">PITCH: <span id="p-val" style="color:var(--purple)">1.0</span></div>
+            <div onclick="toggleDarkMode()">🌓</div>
+            <div onclick="setSleepTimer()">⏰ <span id="t-val">OFF</span></div>
         </div>
-
         <div class="btn-grid">
             <div class="glass-btn" onclick="seekRelative(-10)">-10</div>
             <div class="glass-btn" onclick="prev()">⏮</div>
@@ -180,46 +168,45 @@
             <div class="glass-btn" onclick="next()">⏭</div>
             <div class="glass-btn" onclick="seekRelative(10)">+10</div>
         </div>
-
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="glass-btn" onclick="toggleShuffle()" id="shuf-btn" style="width:44px; height:38px; font-size:0.8rem;">🔀</div>
-            <div class="theme-hub">
-                <div class="theme-dot" onclick="changeTheme(0)" style="background-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=50')"></div>
-                <div class="theme-dot" onclick="changeTheme(1)" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=50')"></div>
-                <div class="theme-dot" onclick="changeTheme(2)" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=50')"></div>
-                <div class="theme-dot" onclick="changeTheme(3)" style="background-image: url('https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=50')"></div>
-                <div class="theme-dot" onclick="changeTheme(4)" style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=50')"></div>
-                <div class="theme-dot" onclick="changeTheme(5)" style="background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=50')"></div>
-            </div>
-            <div class="glass-btn" onclick="toggleRepeat()" id="rep-btn" style="width:44px; height:38px; font-size:0.8rem;">🔁</div>
+            <div class="glass-btn" onclick="toggleShuffle()" id="shuf-btn" style="width:44px; height:38px;">🔀</div>
+            <div class="theme-hub" id="themeList"></div>
+            <div class="glass-btn" onclick="toggleRepeat()" id="rep-btn" style="width:44px; height:38px;">🔁</div>
         </div>
-        <div class="glass-btn" onclick="document.getElementById('fIn').click()" style="width: 100%; height: 35px; margin-top: 12px; font-size: 0.6rem; color: var(--neon); border-color: var(--neon); font-family:'Orbitron';">SYNC FOLDER</div>
+        <div class="glass-btn" onclick="document.getElementById('fIn').click()" style="width: 100%; height: 40px; margin-top: 15px; font-size: 0.7rem; color: var(--neon); border-color: var(--neon); font-family:'Orbitron';">IMPORT FOLDER (AUDIO/VIDEO)</div>
     </div>
 
     <div id="fx-panel">
-        <h3 style="font-family:'Orbitron'; color:var(--neon); font-size:0.9rem; text-align:center; margin-bottom:20px;">AUDIO ENGINE</h3>
-        <label style="font-size:0.55rem; color:var(--neon)">GAIN</label><input type="range" id="gainCtrl" class="mini-slider" min="0" max="2" step="0.1" value="1" oninput="if(gainNode) gainNode.gain.value = this.value" style="margin-bottom:15px">
-        <label style="font-size:0.55rem; color:var(--purple)">BASS</label><input type="range" id="bassCtrl" class="mini-slider" min="-10" max="25" step="1" value="0" oninput="if(bassNode) bassNode.gain.value = this.value" style="margin-bottom:15px">
-        <label style="font-size:0.55rem; color:#fff">TREBLE</label><input type="range" id="trebleCtrl" class="mini-slider" min="-10" max="20" step="1" value="0" oninput="if(trebleNode) trebleNode.gain.value = this.value">
-        <div class="glass-btn" onclick="toggleFX()" style="margin-top:25px; color:#ff4d4d; border-color:#ff4d4d; height:35px; font-size:0.7rem;">CLOSE ENGINE</div>
+        <h3 style="font-family:'Orbitron'; color:var(--neon); font-size:1rem; text-align:center;">NEURAL ENGINE</h3>
+        <label class="slider-label">GAIN (COMPRESSION)</label><input type="range" id="gainCtrl" class="mini-slider" min="0" max="2" step="0.1" value="1" oninput="if(gainNode) gainNode.gain.value = this.value" style="margin-bottom:20px">
+        <label class="slider-label">BASS DEPTH</label><input type="range" id="bassCtrl" class="mini-slider" min="-10" max="25" step="1" value="0" oninput="if(bassNode) bassNode.gain.value = this.value" style="margin-bottom:20px">
+        <label class="slider-label">AI CLARITY</label><input type="range" id="trebleCtrl" class="mini-slider" min="-10" max="20" step="1" value="0" oninput="if(trebleNode) trebleNode.gain.value = this.value">
+        <div class="glass-btn" onclick="toggleFX()" style="margin-top:30px; color:#ff4d4d; border-color:#ff4d4d;">EXIT ENGINE</div>
     </div>
 
     <div id="file-list-view">
-        <h2 style="font-family:'Orbitron'; font-size: 0.9rem; margin-bottom: 15px; color:var(--neon);">LIBRARY</h2>
-        <input type="text" class="search-box" id="songSearch" placeholder="Search your vibe..." oninput="filterSongs()">
-        <div id="list-items" style="overflow-y:auto; flex:1; padding-right: 5px;"></div>
-        <div class="glass-btn" onclick="toggleFiles()" style="margin-top:15px; color:#ff4d4d; height:35px; font-size:0.7rem;">CLOSE LIBRARY</div>
+        <h2 style="font-family:'Orbitron'; font-size: 1rem; color:var(--neon);">MY LIBRARY</h2>
+        <input type="text" class="search-box" id="songSearch" placeholder="Search track..." oninput="filterSongs()">
+        <div id="list-items" style="overflow-y:auto; flex:1;"></div>
+        <div class="glass-btn" onclick="toggleFiles()" style="margin-top:15px; color:#ff4d4d;">BACK</div>
     </div>
 </div>
 
 <input type="file" id="fIn" webkitdirectory directory multiple style="display:none">
-<audio id="audio" crossorigin="anonymous"></audio>
 
 <script>
-    const audio = document.getElementById('audio');
+    const audio = document.getElementById('player'); 
+    const videoCont = document.getElementById('video-container');
+    const circularViz = document.getElementById('circularViz');
+    const core = document.getElementById('core');
+
     let songs = [], filteredSongs = [], idx = 0, isShuffle = false, repeatMode = 0, bIdx = 0;
-    let currentPitch = 1.0, currentSpeed = 1.0;
-    let actx, analyser, gainNode, bassNode, trebleNode, source, sleepTimeout;
+    let currentPitch = 1.0, currentSpeed = 1.0, lastTap = 0;
+    let actx, analyser, gainNode, bassNode, trebleNode, compressor, source, sleepTimeout;
+
+    async function requestWakeLock() {
+        try { if('wakeLock' in navigator) { await navigator.wakeLock.request('screen'); } } catch (err) {}
+    }
 
     const linViz = document.getElementById('linViz');
     for(let i=0; i<40; i++) {
@@ -229,7 +216,7 @@
     }
     const bars = document.querySelectorAll('.bar');
 
-    const dbName = "HashPlayerDB_Final";
+    const dbName = "HashPlayerDB_v2";
     const dbReq = indexedDB.open(dbName, 1);
     dbReq.onupgradeneeded = e => e.target.result.createObjectStore("library", { keyPath: "id" });
 
@@ -238,7 +225,7 @@
         const tx = db.transaction("library", "readwrite");
         const store = tx.objectStore("library");
         await store.clear();
-        for(let i=0; i<files.length; i++) { store.put({ id: i, name: files[i].name, data: files[i] }); }
+        for(let i=0; i<files.length; i++) { store.put({ id: i, name: files[i].name, type: files[i].type, data: files[i] }); }
     }
 
     async function loadStoredFolder() {
@@ -246,9 +233,9 @@
         const tx = db.transaction("library", "readonly");
         const all = await new Promise(r => tx.objectStore("library").getAll().onsuccess = e => r(e.target.result));
         if(all.length) {
-            songs = all.map(s => ({ file: s.data, name: s.name }));
+            songs = all.map(s => ({ file: s.data, name: s.name, type: s.type }));
             filteredSongs = [...songs];
-            document.getElementById('status').innerText = "RESTORED: " + songs.length + " VIBES";
+            document.getElementById('status').innerText = "RESTORED: " + songs.length + " ITEMS";
             renderList();
         }
     }
@@ -259,17 +246,42 @@
         analyser = actx.createAnalyser();
         analyser.fftSize = 256;
         source = actx.createMediaElementSource(audio);
+        compressor = actx.createDynamicsCompressor();
+        compressor.threshold.setValueAtTime(-24, actx.currentTime);
+        compressor.knee.setValueAtTime(40, actx.currentTime);
+        compressor.ratio.setValueAtTime(12, actx.currentTime);
+        compressor.attack.setValueAtTime(0, actx.currentTime);
+        compressor.release.setValueAtTime(0.25, actx.currentTime);
         gainNode = actx.createGain();
         bassNode = actx.createBiquadFilter(); bassNode.type = 'lowshelf'; bassNode.frequency.value = 200;
         trebleNode = actx.createBiquadFilter(); trebleNode.type = 'highshelf'; trebleNode.frequency.value = 3000;
-        source.connect(bassNode).connect(trebleNode).connect(gainNode).connect(analyser).connect(actx.destination);
+        source.connect(bassNode).connect(trebleNode).connect(compressor).connect(gainNode).connect(analyser).connect(actx.destination);
+        document.getElementById('neural-tag').innerText = "NEURAL: ACTIVE";
+        requestWakeLock();
         draw();
     }
 
+    function applySlowedReverb() {
+        if(!audio.src) return;
+        currentSpeed = 0.8;
+        currentPitch = 0.8;
+        audio.preservesPitch = false; 
+        audio.playbackRate = 0.8;
+        
+        document.getElementById('s-val').innerText = "0.8";
+        document.getElementById('p-val').innerText = "0.8";
+        
+        if(bassNode) {
+            bassNode.gain.value = 15;
+            document.getElementById('bassCtrl').value = 15;
+        }
+        document.getElementById('status').innerText = "SLOWED + REVERB";
+    }
+
     document.getElementById('fIn').addEventListener('change', async e => {
-        const files = Array.from(e.target.files).filter(f => f.type.startsWith('audio'));
+        const files = Array.from(e.target.files).filter(f => f.type.startsWith('audio') || f.type.startsWith('video'));
         if(files.length === 0) return;
-        songs = files.map(file => ({file, name: file.name}));
+        songs = files.map(file => ({file, name: file.name, type: file.type}));
         filteredSongs = [...songs];
         await saveFolder(files);
         renderList(); load(0);
@@ -277,26 +289,37 @@
 
     function load(i) {
         if(!songs[i]) return; idx = i;
-        const name = songs[i].name.split('.')[0].toUpperCase();
-        audio.src = URL.createObjectURL(songs[i].file);
-        
-        // Update scrolling background title only
-        document.getElementById('bgTitle').innerText = name + " • " + name + " • " + name + " • ";
-        document.getElementById('status').innerText = "NOW PLAYING";
-
+        const file = songs[i];
+        const isVideo = file.type.startsWith('video');
+        videoCont.style.display = isVideo ? 'block' : 'none';
+        circularViz.style.display = isVideo ? 'none' : 'block';
+        core.style.display = isVideo ? 'none' : 'flex';
+        const name = file.name.split('.')[0].toUpperCase();
+        if(audio.src) URL.revokeObjectURL(audio.src);
+        audio.src = URL.createObjectURL(file.file || file);
+        document.getElementById('bgTitle').innerText = name + " • " + name + " • ";
+        document.getElementById('status').innerText = isVideo ? "VIDEO MODE" : "AUDIO MODE";
         let nextIdx = isShuffle ? Math.floor(Math.random()*songs.length) : (idx + 1) % songs.length;
         document.getElementById('next-track-info').innerText = "NEXT: " + songs[nextIdx].name.split('.')[0].toUpperCase();
-        
         initFX();
         audio.playbackRate = currentSpeed;
-        audio.preservesPitch = true; // Speed won't affect pitch now
-        audio.play();
+        audio.play().catch(() => { document.getElementById('status').innerText = "TAP TO PLAY"; });
         document.getElementById('play-ui').innerText = '⏸';
         renderList();
     }
 
+    audio.addEventListener('click', () => {
+        const now = Date.now();
+        if (now - lastTap < 300) {
+            if (audio.requestFullscreen) audio.requestFullscreen();
+            else if (audio.webkitRequestFullscreen) audio.webkitRequestFullscreen();
+        }
+        lastTap = now;
+    });
+
     function togglePlay() { 
-        if(!audio.src) return; 
+        if(!audio.src && songs.length > 0) { load(0); return; }
+        if(!audio.src) return;
         if(actx && actx.state === 'suspended') actx.resume();
         audio.paused ? audio.play() : audio.pause();
         document.getElementById('play-ui').innerText = audio.paused ? '▶' : '⏸';
@@ -304,10 +327,9 @@
 
     function next() { load(isShuffle ? Math.floor(Math.random()*songs.length) : (idx+1)%songs.length); }
     function prev() { load((idx-1+songs.length)%songs.length); }
-
     function updateVol(v) { audio.volume = v/100; }
     function updateBrightness(v) { document.getElementById('bgBody').style.filter = `brightness(${v/100}) contrast(1.1)`; }
-    function cycleBlur() { const blurs = [0, 10, 25, 45]; bIdx = (bIdx + 1) % blurs.length; document.getElementById('p-container').style.backdropFilter = `blur(${blurs[bIdx]}px)`; }
+    function cycleBlur() { const blurs = [0, 10, 25, 45]; bIdx = (bIdx + 1) % blurs.length; document.getElementById('p-container').style.backdropFilter = `blur(${blurs[bIdx]}px)`; document.getElementById('p-container').style.webkitBackdropFilter = `blur(${blurs[bIdx]}px)`; }
     function toggleFiles() { const v = document.getElementById('file-list-view'); v.style.display = v.style.display==='flex'?'none':'flex'; }
     function toggleFX() { const v = document.getElementById('fx-panel'); v.style.display = v.style.display==='flex'?'none':'flex'; }
     
@@ -318,127 +340,106 @@
     }
 
     function renderList() {
-        document.getElementById('list-items').innerHTML = filteredSongs.map((s, i) => {
-            const originalIndex = songs.indexOf(s);
-            const isActive = originalIndex === idx;
-            return `
-                <div class="track-item ${isActive ? 'active' : ''}" onclick="load(${originalIndex}); toggleFiles();">
-                    <span style="color: ${isActive ? 'var(--neon)' : '#fff'}">${s.name.split('.')[0]}</span>
-                </div>
-            `}).join('');
+        document.getElementById('list-items').innerHTML = filteredSongs.map((s) => {
+            const oIdx = songs.indexOf(s);
+            const icon = s.type.startsWith('video') ? '🎥' : '🎵';
+            return `<div class="track-item ${oIdx === idx ? 'active' : ''}" onclick="load(${oIdx}); toggleFiles();"><span>${icon} ${s.name.split('.')[0]}</span></div>`
+        }).join('');
     }
-
-    let touchX = 0;
-    const gestureArea = document.getElementById('gestureArea');
-    gestureArea.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
-    gestureArea.addEventListener('touchend', e => {
-        const diff = touchX - e.changedTouches[0].clientX;
-        if(Math.abs(diff) > 50) diff > 0 ? next() : prev();
-    });
-    gestureArea.addEventListener('dblclick', togglePlay);
 
     function draw() {
         requestAnimationFrame(draw);
+        if(!analyser) return;
         const data = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(data);
-
-        const cv = document.getElementById('circularViz');
-        const cx = cv.getContext('2d');
-        cv.width = 400; cv.height = 400; // Increased Canvas internal resolution
-        cx.clearRect(0,0,400,400);
         
-        for(let i=0; i<80; i++) {
-            const r = 80 + (data[i] * 0.45); // Larger bars
-            const a = (i * Math.PI * 2) / 80;
-            cx.strokeStyle = 'rgba(0, 243, 255, 0.5)'; 
-            cx.lineWidth = 4; 
-            cx.beginPath(); 
-            cx.moveTo(200+Math.cos(a)*75, 200+Math.sin(a)*75); 
-            cx.lineTo(200+Math.cos(a)*r, 200+Math.sin(a)*r); 
-            cx.stroke();
+        if(videoCont.style.display !== 'block') {
+            const cv = document.getElementById('circularViz');
+            const cx = cv.getContext('2d');
+            cv.width = 300; cv.height = 300;
+            cx.clearRect(0,0,300,300);
+            for(let i=0; i<80; i++) {
+                const r = 60 + (data[i] * 0.35);
+                const a = (i * Math.PI * 2) / 80;
+                cx.strokeStyle = i % 2 === 0 ? 'var(--neon)' : 'var(--purple)'; 
+                cx.lineWidth = 3; cx.beginPath(); 
+                cx.moveTo(150+Math.cos(a)*55, 150+Math.sin(a)*55); 
+                cx.lineTo(150+Math.cos(a)*r, 150+Math.sin(a)*r); cx.stroke();
+            }
+            const bassAvg = data[2];
+            core.style.transform = `scale(${1 + (bassAvg/600)})`;
+            core.style.boxShadow = `0 0 ${bassAvg/5}px var(--neon)`;
         }
 
         bars.forEach((bar, i) => {
             const h = (data[i*2] / 255) * 30;
             bar.style.height = Math.max(2, h) + 'px';
-            const hue = (i * 9 + Date.now()/40) % 360;
-            bar.style.background = `hsla(${hue}, 100%, 50%, 1)`;
+            bar.style.background = `hsla(${(i*9+Date.now()/40)%360}, 100%, 50%, 1)`;
         });
 
         const avg = data.reduce((a,b)=>a+b,0)/data.length;
-        const db = Math.round(20 * Math.log10(avg/255));
-        document.getElementById('freqMeter').innerHTML = `HZ: ${Math.round(avg*40)}<br>DB: ${isFinite(db)?db:'-60'}`;
+        document.getElementById('freqMeter').innerHTML = `HZ: ${Math.round(avg*40)}<br>DB: ${Math.round(20*Math.log10(avg/255+0.001))}<span id="neural-tag">NEURAL: ACTIVE</span>`;
     }
 
     function tapPitch() { 
         currentPitch = currentPitch >= 2.0 ? 0.5 : parseFloat((currentPitch + 0.1).toFixed(1));
-        // Manually manipulating pitch using playbackRate while preservesPitch is false
-        audio.preservesPitch = false; 
-        audio.playbackRate = currentPitch;
+        audio.preservesPitch = false; audio.playbackRate = currentPitch;
         document.getElementById('p-val').innerText = currentPitch;
     }
 
     function tapSpeed() { 
         const s = [1.0, 1.2, 1.5, 0.8]; 
         currentSpeed = s[(s.indexOf(currentSpeed)+1)%s.length];
-        audio.preservesPitch = true; // For normal speed change, keep pitch same
-        audio.playbackRate = currentSpeed; 
+        audio.preservesPitch = true; audio.playbackRate = currentSpeed; 
         document.getElementById('s-val').innerText = currentSpeed; 
     }
 
     function setSleepTimer() {
-        const mins = prompt("Enter sleep timer minutes:", "30");
+        const mins = prompt("Stop music after (minutes):", "30");
         if (mins) {
             if (sleepTimeout) clearTimeout(sleepTimeout);
-            const ms = parseInt(mins) * 60000;
             document.getElementById('t-val').innerText = mins + "m";
-            sleepTimeout = setTimeout(() => {
-                audio.pause();
-                document.getElementById('play-ui').innerText = '▶';
-                document.getElementById('t-val').innerText = "OFF";
-            }, ms);
+            sleepTimeout = setTimeout(() => { audio.pause(); document.getElementById('play-ui').innerText = '▶'; document.getElementById('t-val').innerText = "OFF"; }, mins * 60000);
         }
     }
 
     function seekRelative(s) { audio.currentTime += s; }
     function seek(e) { audio.currentTime = (e.offsetX / e.currentTarget.offsetWidth) * audio.duration; }
-    function toggleShuffle() { 
-        isShuffle = !isShuffle; 
-        document.getElementById('shuf-btn').style.color = isShuffle ? 'var(--neon)' : '#fff'; 
-    }
+    function toggleShuffle() { isShuffle = !isShuffle; document.getElementById('shuf-btn').style.color = isShuffle ? 'var(--neon)' : '#fff'; }
     function toggleRepeat() { 
         repeatMode = (repeatMode + 1) % 3; 
         const btn = document.getElementById('rep-btn');
-        if(repeatMode === 0) { btn.innerText = '🔁'; btn.style.color = '#fff'; }
-        if(repeatMode === 1) { btn.innerText = '🔂'; btn.style.color = 'var(--neon)'; }
-        if(repeatMode === 2) { btn.innerText = '🔁'; btn.style.color = 'var(--neon)'; }
+        btn.style.color = repeatMode > 0 ? 'var(--neon)' : '#fff';
+        btn.innerText = repeatMode === 1 ? '🔂' : '🔁';
     }
 
     function toggleDarkMode() { document.getElementById('mainBody').classList.toggle('dark-mode'); }
-    function changeTheme(i) {
-        const themes = [
-            'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=1000',
-            'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000',
-            'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1000',
-            'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=1000',
-            'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1000',
-            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1000'
-        ];
-        document.getElementById('bgBody').style.backgroundImage = `url(${themes[i]})`;
-    }
+    
+    const themes = [
+        'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=600',
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600',
+        'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600',
+        'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=600',
+        'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600',
+        'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600'
+    ];
+    document.getElementById('themeList').innerHTML = themes.map((t, i) => `<div class="theme-dot" onclick="changeTheme(${i})" style="background-image: url('${t}')"></div>`).join('');
+    function changeTheme(i) { document.getElementById('bgBody').style.backgroundImage = `url(${themes[i]})`; }
 
     audio.ontimeupdate = () => { 
         if(audio.duration) {
             document.getElementById('fill').style.width = (audio.currentTime/audio.duration)*100 + '%';
-            document.getElementById('timer-display').innerText = Math.floor(audio.currentTime/60) + ":" + (Math.floor(audio.currentTime%60)<10?'0':'') + Math.floor(audio.currentTime%60) + " / " + Math.floor(audio.duration/60) + ":" + (Math.floor(audio.duration%60)<10?'0':'') + Math.floor(audio.duration/60);
+            const cur = Math.floor(audio.currentTime/60)+":"+String(Math.floor(audio.currentTime%60)).padStart(2,'0');
+            const dur = Math.floor(audio.duration/60)+":"+String(Math.floor(audio.duration%60)).padStart(2,'0');
+            document.getElementById('timer-display').innerText = cur + " / " + dur;
         }
     };
-    
-    audio.onended = () => {
-        if(repeatMode === 1) { audio.play(); } else { next(); }
-    };
+    audio.onended = () => { if(repeatMode === 1) audio.play(); else next(); };
 
-    window.onload = loadStoredFolder;
+    window.onload = () => {
+        loadStoredFolder();
+        document.body.addEventListener('click', () => { if(actx) actx.resume(); }, {once: true});
+    };
 </script>
 </body>
 </html>
