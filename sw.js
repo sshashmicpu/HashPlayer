@@ -1,4 +1,4 @@
-const cacheName = 'hash-player-v2'; // Version change
+const cacheName = 'hash-player-v2.1'; // Version change
 const assets = [
   'index.html',
   'icon.png',
