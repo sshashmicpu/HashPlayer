@@ -131,11 +131,16 @@
         
         #circularViz { position: absolute; width: 280px; height: 280px; z-index: 2; pointer-events: none; top: 50%; left: 50%; transform: translate(-50%, -50%); }
         
+        /* Video Aspect Ratio 4:3 with Screen Fill Setup */
         #video-container { 
-            position: absolute; width: 96%; height: 60%; background: #000; 
+            position: absolute; 
+            width: 96%; 
+            aspect-ratio: 4 / 3; /* Set 4:3 Ratio */
+            background: #000; 
             border-radius: 15px; border: 1px solid var(--neon); overflow: hidden; 
             display: none; z-index: 100; box-shadow: 0 0 30px rgba(0,243,255,0.3);
-            max-width: 98%; transition: 0.3s; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            max-width: 98%; transition: 0.3s; 
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
         }
         video#player { width: 100%; height: 100%; object-fit: cover; cursor: pointer; background: #000; }
 
@@ -161,6 +166,7 @@
             .container { max-width: 96vw; width: 96vw; height: 94vh; flex-direction: row; border-radius: 25px; }
             .viz-hub { flex: 1; height: 100%; border-right: 1px solid var(--border); }
             #circularViz { width: 220px; height: 220px; }
+            #video-container { top: 56%; } /* Fixed: Moves video down in landscape to avoid overlapping buttons */
             .center-core { width: 50px; height: 50px; }
             .glass-controls { flex: 1; height: 100%; border-radius: 0; border-top: none; display: flex; flex-direction: column; justify-content: center; padding: 15px 30px; background: rgba(0,0,0,0.2); }
             .app-header, .v-label-wrap, .marquee-bg { display: none; }
@@ -845,15 +851,15 @@
         }
     };
 </script>
-        <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Offline Engine Ready!'))
-            .catch(err => console.log('Offline Engine Failed:', err));
-        });
-      }
-    </script>
+<script>
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Offline Engine Ready!'))
+        .catch(err => console.log('Offline Engine Failed:', err));
+    });
+    }
+</script>
 
 </body>
 </html>
