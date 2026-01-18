@@ -1,4 +1,4 @@
-const cacheName = 'hash-player-v1';
+const cacheName = 'hash-player-v2';
 // Sirf files ke naam likhein, slash (/) ka khayal rakhein
 const assets = [
   'index.html',
