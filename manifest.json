@@ -1,0 +1,16 @@
+{
+  "name": "HASH PLAYER // NEURAL ELITE",
+  "short_name": "HashPlayer",
+  "description": "Premium Media Player by Neural Elite",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00f3ff",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/512x512/000000/00f3ff?text=HP",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
