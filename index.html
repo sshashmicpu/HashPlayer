@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>HASH PLAYER // HASHTECH</title>
-
-<link rel="manifest" href="manifest.json">
-    
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>HASH PLAYER // NEURAL ELITE</title>
     <style>
         /* Amiri Font for Urdu added here */
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Orbitron:wght@400;900&family=Rajdhani:wght@300;500;700&display=swap');
@@ -50,11 +48,22 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         .dark-mode { --glass: rgba(0, 0, 0, 0.3); --card-bg: rgba(0, 0, 0, 0.3); --border: rgba(255, 255, 255, 0.1); }
 
-        body { margin: 0; background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; padding-top: env(safe-area-inset-top); transition: background 0.3s ease; }
+        body { 
+            margin: 0; background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; 
+            height: 100vh; height: 100dvh; /* dvh fixes the bottom cutting issue */
+            overflow: hidden; display: flex; justify-content: center; align-items: flex-start; 
+            padding-top: env(safe-area-inset-top); 
+            padding-bottom: env(safe-area-inset-bottom);
+            transition: background 0.3s ease; 
+        }
         
         .bg-vibrant { position: fixed; inset: 0; z-index: -1; background: var(--bg-img); background-size: cover; background-position: center; filter: brightness(0.6) contrast(1.1); transition: 1s ease; }
 
-        .container { width: 94%; max-width: 440px; height: 98vh; margin-top: 5px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 40px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .container { 
+            width: 94%; max-width: 440px; 
+            height: calc(100% - 20px); /* Height adjusted to be dynamic */
+            margin-top: 5px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 40px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
 
         #exit-dialog {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -163,7 +172,6 @@
         .filter-opt { flex: 1; padding: 6px; background: var(--glass); border: 1px solid var(--border); border-radius: 8px; font-size: 0.6rem; font-family: 'Orbitron'; color: #fff; cursor: pointer; text-align: center; }
         .filter-opt.active { border-color: var(--neon); color: var(--neon); }
         
-        /* Updated Track List Styling for Scrolling and Fonts */
         #list-items { overflow-y: auto !important; height: 100%; -webkit-overflow-scrolling: touch; }
         
         .track-item { 
@@ -174,7 +182,6 @@
         }
         .track-item.active { border-color: var(--neon); background: rgba(0, 243, 255, 0.15); }
         
-        /* Name Container and Marquee for Library */
         .track-name-container { flex: 1; overflow: hidden; white-space: nowrap; position: relative; margin-right: 10px; }
         .track-name-scroll { display: inline-block; padding-left: 0; }
         .track-item:hover .track-name-scroll { animation: listMarquee 5s linear infinite; }
@@ -745,7 +752,6 @@
             cx.beginPath(); cx.moveTo(150+Math.cos(a)*55, 150+Math.sin(a)*55); cx.lineTo(150+Math.cos(a)*r, 150+Math.sin(a)*r); cx.stroke();
         }
 
-        // Frequency Meter Update Logic
         if(!audio.paused) {
             let avg = sum / 80;
             let hz = Math.round(avg * 15 + Math.random() * 50);
@@ -785,7 +791,6 @@
     function setLibFilter(type) { currentLibType = (currentLibType === type) ? 'all' : type; document.querySelectorAll('.filter-opt').forEach(el => el.classList.remove('active')); if(currentLibType !== 'all') document.getElementById('f-'+type).classList.add('active'); filterSongs(); }
     function filterSongs() { const q = document.getElementById('songSearch').value.toLowerCase(); filteredSongs = songs.filter(s => s.name.toLowerCase().includes(q) && (currentLibType === 'all' || s.type.startsWith(currentLibType))); renderList(); }
     
-    // Updated RenderList Function to handle scrolling names and Amiri font
     function renderList() { 
         document.getElementById('list-items').innerHTML = filteredSongs.map((s) => { 
             const oIdx = songs.indexOf(s); 
@@ -820,7 +825,6 @@
     };
     audio.onended = () => { if(repeatMode === 1) { audio.currentTime = 0; audio.play(); } else { next(); } };
 
-    // Exit Dialog Logic
     function confirmExit() { saveSettings(); window.close(); if(!window.closed) { window.location.href = "about:blank"; } }
     function cancelExit() { document.getElementById('exit-dialog').style.display = 'none'; history.pushState(null, null, location.href); }
     
