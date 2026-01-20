@@ -732,7 +732,7 @@
     function toggleSlowedReverb() {
         if(!audio.src) return;
         isSR = !isSR;
-        if(isSR) { currentSpeed = 0.8; currentPitch = 0.8; audio.preservesPitch = false; applyFX(1.2, 15, -2); }
+        if(isSR) { currentSpeed = 0.8; currentPitch = 0.8; audio.preservesPitch = false; applyFX(1.2, -2, -2); }
         else { currentSpeed = 1.0; currentPitch = 1.0; audio.preservesPitch = true; applyFX(1, 0, 0); }
         audio.playbackRate = currentSpeed;
         document.getElementById('s-val').innerText = currentSpeed;
